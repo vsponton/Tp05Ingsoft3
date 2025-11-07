@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🌿 PlantHub</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>🌿 PlantHub</h1>
+      <p>Cuidá tus plantas y descubrí nuevas especies</p>
+    </header>
+
+    <button id="btn-show-form">➕ Agregar Planta</button>
+
+    <form id="plant-form" style="display: none;">
+      <input type="text" id="name" placeholder="Nombre" required />
+      <input type="text" id="type" placeholder="Tipo (Interior, Suculenta...)" required />
+      <input type="text" id="size" placeholder="Tamaño" />
+      <input type="text" id="light" placeholder="Luz" />
+      <input type="text" id="water" placeholder="Frecuencia de riego" />
+      <textarea id="description" placeholder="Descripción"></textarea>
+      <button type="submit">Guardar</button>
+    </form>
+
+    <section id="plant-grid"></section>
+
+    <script src="app.js"></script>
+  </body>
+</html>
