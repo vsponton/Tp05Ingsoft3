@@ -1,0 +1,83 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+  azureSubscription: 'azure-tp05-connection' # service connection
+  webAppQA: 'webapp-tp05-qa-sponton'
+  webAppPROD: 'webapp-tp05-prod-sponton'
+
+stages:
+# 🔹 STAGE 1: Build
+- stage: Build
+  displayName: 'Build and Test PlantHub'
+  jobs:
+  - job: BuildJob
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '22.x'
+      displayName: 'Instalar Node.js'
+
+    - script: |
+        cd backend
+        npm install
+      displayName: 'Instalar dependencias'
+
+    - script: |
+        echo "Verificando backend..."
+        node -v
+      displayName: 'Test backend'
+
+    - script: |
+        echo "Empaquetando archivos..."
+        zip -r $(Build.ArtifactStagingDirectory)/plantHub.zip .
+      displayName: 'Crear artefacto'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: 'drop'
+      displayName: 'Publicar artefactos'
+
+# 🔹 STAGE 2: QA
+- stage: DeployQA
+  displayName: 'Deploy a QA'
+  dependsOn: Build
+  jobs:
+  - deployment: DeployQA
+    environment: 'QA'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureWebApp@1
+            inputs:
+              azureSubscription: '$(azureSubscription)'
+              appType: 'webApp'
+              appName: '$(webAppQA)'
+              package: '$(Pipeline.Workspace)/drop/plantHub.zip'
+            displayName: 'Desplegar en QA'
+
+# 🔹 STAGE 3: Producción
+- stage: DeployPROD
+  displayName: 'Deploy a Producción'
+  dependsOn: DeployQA
+  condition: succeeded()
+  jobs:
+  - deployment: DeployPROD
+    environment: 'PROD'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureWebApp@1
+            inputs:
+              azureSubscription: '$(azureSubscription)'
+              appType: 'webApp'
+              appName: '$(webAppPROD)'
+              package: '$(Pipeline.Workspace)/drop/plantHub.zip'
+            displayName: 'Desplegar en Producción'
