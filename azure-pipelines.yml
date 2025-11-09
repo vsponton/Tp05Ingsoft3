@@ -7,8 +7,8 @@ pool:
 variables:
   buildConfiguration: 'Release'
   azureSubscription: 'azure-tp05-connection' # service connection
-  webAppQA: 'webapp-tp05-qa-sponton'
-  webAppPROD: 'webapp-tp05-prod-sponton'
+  webAppQA: 'webapp-tp05-qa'
+  webAppPROD: 'webapp-tp05-prod'
 
 stages:
 # 🔹 STAGE 1: Build
