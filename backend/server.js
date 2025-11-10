@@ -4,7 +4,9 @@ const path = require("path");
 const sqlite3 = require("sqlite3").verbose();
 
 const app = express();
-const PORT = 4000;
+
+// 👉 Azure define el puerto en process.env.PORT
+const PORT = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(express.json());
@@ -67,6 +69,12 @@ app.get("/stats", (req, res) => {
   });
 });
 
+// ✅ Health check endpoint para Azure
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
+// Iniciar servidor
 app.listen(PORT, () => {
   console.log(`🌿 PlantHub corriendo en http://localhost:${PORT}`);
 });
