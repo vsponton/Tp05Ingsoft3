@@ -64,3 +64,7 @@ async function deletePlant(id) {
 
 // Cargar al inicio
 loadPlants();
+
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
