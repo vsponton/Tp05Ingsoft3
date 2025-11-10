@@ -59,7 +59,7 @@ stages:
               azureSubscription: '$(azureSubscription)'
               appType: 'webApp'
               appName: '$(webAppQA)'
-              package: '$(Pipeline.Workspace)/drop/backend/plantHub.zip'
+              package: '$(Pipeline.Workspace)/drop/plantHub.zip'
             displayName: 'Desplegar en QA'
 
 # 🔹 STAGE 3: Producción
@@ -79,5 +79,5 @@ stages:
               azureSubscription: '$(azureSubscription)'
               appType: 'webApp'
               appName: '$(webAppPROD)'
-              package: '$(Pipeline.Workspace)/drop/backend/plantHub.zip'
+              package: '$(Pipeline.Workspace)/drop/plantHub.zip'
             displayName: 'Desplegar en Producción'
